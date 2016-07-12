@@ -11,7 +11,7 @@ var globalMaxAnimTime = 5000;
 var globalMinAnimTime = 1000;
 var amountOfCircles = 500;
 var id = 0;
-var colors = [];
+var colors = ['2,40,89', '1,17,38', '2,64,89', '67,68,91', '20,97,115'];
 var circles = [];
 
 function Circle(id, x, y, radius, maxRadius, rgbColorString, animTime, timeToLive, startFadeOut) {
@@ -22,7 +22,7 @@ function Circle(id, x, y, radius, maxRadius, rgbColorString, animTime, timeToLiv
     this.y = y;
     this.radius = radius;
     this.maxRadius = maxRadius;
-    this.rgbColorString = rgbColorString;
+    this.rgbColorString = rgbColorString; // Written as 'r,g,b' (no trailing comma!)
     this.opacity = 1;
     this.animProgress = 0;
     this.animTime = animTime;
@@ -73,7 +73,7 @@ function newCircle() {
     var randMaxRadius = Math.floor(Math.random() * globalMaxRadius) + globalMinRadius;
     var randAnimTime  = Math.floor(Math.random() * globalMaxAnimTime) + globalMinAnimTime;
     var randTimeToLive = Math.floor(Math.random() * globalMaxPulses) + globalMinPulses;
-    var rgbColorString = Math.floor(Math.random() * colors.length) + 0;
+    var rgbColorString = colors[Math.floor(Math.random() * colors.length) + 0];
     // Push a new circle to the circles array
     // See circle object for info
     circles.push(new Circle(id, randX,randY, 0, randMaxRadius, rgbColorString, randAnimTime, randTimeToLive, randAnimTime / 2));
@@ -96,8 +96,14 @@ function collectGarbage(frequency) {
 }
 
 function draw() {
+    // Clear the canvas
     ctx.clearRect(0, 0, sizeX, sizeY);
+    // Set the background to black
+    ctx.fillStyle = 'black';
+    ctx.rect(0,0,sizeX,sizeY);
+    ctx.fill();
 
+    // Draw each circle
     for(var item in circles){
         var circle = circles[item];
         // Check if this circle has died, if it has, skip next logic
@@ -119,7 +125,7 @@ function draw() {
             circle.opacity = 1;
         }
         // Start drawing
-        ctx.fillStyle = 'rgba(0,0,0,' + circle.opacity + ')';
+        ctx.fillStyle = 'rgba(' + circle.rgbColorString + ',' + circle.opacity + ')';
         ctx.beginPath();
         ctx.moveTo(circle.x, circle.y);
         // The radius of this circle is the animation progress in milliseconds
