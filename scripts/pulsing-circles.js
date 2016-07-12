@@ -11,9 +11,10 @@ var globalMaxAnimTime = 5000;
 var globalMinAnimTime = 1000;
 var amountOfCircles = 500;
 var id = 0;
+var colors = [];
 var circles = [];
 
-function Circle(id, x, y, radius, maxRadius, animTime, timeToLive, startFadeOut) {
+function Circle(id, x, y, radius, maxRadius, rgbColorString, animTime, timeToLive, startFadeOut) {
     this.id = id;
     this.amountPulsed = 0;
     this.startTime = new Date().getTime();
@@ -21,6 +22,7 @@ function Circle(id, x, y, radius, maxRadius, animTime, timeToLive, startFadeOut)
     this.y = y;
     this.radius = radius;
     this.maxRadius = maxRadius;
+    this.rgbColorString = rgbColorString;
     this.opacity = 1;
     this.animProgress = 0;
     this.animTime = animTime;
@@ -71,9 +73,10 @@ function newCircle() {
     var randMaxRadius = Math.floor(Math.random() * globalMaxRadius) + globalMinRadius;
     var randAnimTime  = Math.floor(Math.random() * globalMaxAnimTime) + globalMinAnimTime;
     var randTimeToLive = Math.floor(Math.random() * globalMaxPulses) + globalMinPulses;
+    var rgbColorString = Math.floor(Math.random() * colors.length) + 0;
     // Push a new circle to the circles array
     // See circle object for info
-    circles.push(new Circle(id, randX,randY, 0, randMaxRadius, randAnimTime, randTimeToLive, randAnimTime / 2));
+    circles.push(new Circle(id, randX,randY, 0, randMaxRadius, rgbColorString, randAnimTime, randTimeToLive, randAnimTime / 2));
     id++;
 }
 
