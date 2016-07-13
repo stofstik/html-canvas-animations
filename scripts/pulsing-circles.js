@@ -11,7 +11,11 @@ var globalMaxAnimTime = 5000;
 var globalMinAnimTime = 1000;
 var amountOfCircles = 500;
 var id = 0;
-var colors = ['2,40,89', '1,17,38', '2,64,89', '67,68,91', '20,97,115'];
+var colorSchemes = {
+    darkBlue: ['2,40,89', '1,17,38', '2,64,89', '67,68,91', '20,97,115'],
+    green: ['174,243,103', '157,182,131', '119,167,71', '210,243,176', '83,116,49']
+};
+var colors = colorSchemes.green;
 var circles = [];
 
 function Circle(id, x, y, radius, maxRadius, rgbColorString, animTime, timeToLive, startFadeOut) {
@@ -37,6 +41,7 @@ function init() {
     // Get the canvas element to work with
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
+    canvas.addEventListener('mousedown', click, false);
 
     // Get the window size
     sizeX = window.innerWidth;
@@ -66,18 +71,29 @@ function resizeCanvas() {
     window.requestAnimationFrame(draw);
 }
 
-function newCircle() {
+function click(event) {
+    console.log(event);
+}
+
+function newCircle(hasRandomColor) {
     // get a random position for x and y
     var randX = Math.floor(Math.random() * sizeX) + 1;
     var randY = Math.floor(Math.random() * sizeY) + 1;
     var randMaxRadius = Math.floor(Math.random() * globalMaxRadius) + globalMinRadius;
     var randAnimTime  = Math.floor(Math.random() * globalMaxAnimTime) + globalMinAnimTime;
     var randTimeToLive = Math.floor(Math.random() * globalMaxPulses) + globalMinPulses;
-    var rgbColorString = colors[Math.floor(Math.random() * colors.length) + 0];
+    var rgbColorString = hasRandomColor ? randomColor() : colors[Math.floor(Math.random() * colors.length)];
     // Push a new circle to the circles array
     // See circle object for info
     circles.push(new Circle(id, randX,randY, 0, randMaxRadius, rgbColorString, randAnimTime, randTimeToLive, randAnimTime / 2));
     id++;
+}
+
+function randomColor() {
+    var r = Math.floor(Math.random() * 255) + 0;
+    var g = Math.floor(Math.random() * 255) + 0;
+    var b = Math.floor(Math.random() * 255) + 0;
+    return r + ',' + g + ',' + b;
 }
 
 // Collect dead circles. We use this batch method to increase performance.
