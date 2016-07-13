@@ -100,8 +100,7 @@ function draw() {
     ctx.clearRect(0, 0, sizeX, sizeY);
     // Set the background to black
     ctx.fillStyle = 'black';
-    ctx.rect(0,0,sizeX,sizeY);
-    ctx.fill();
+    ctx.fillRect(0,0,sizeX,sizeY);
 
     // Draw each circle
     for(var item in circles){
