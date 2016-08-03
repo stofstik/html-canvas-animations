@@ -1,22 +1,26 @@
 var pulsingCircles = function(window, document){
+
 var canvas;
 var ctx;
-var sizeX = 0;
-var sizeY = 0;
-var globalMaxRadius = 10;
-var globalMinRadius = 5;
-var globalMaxPulses = 5;
-var globalMinPulses = 2;
-var globalMaxAnimTime = 5000;
-var globalMinAnimTime = 1000;
-var amountOfCircles = 500;
+var sizeX = 0; // Width of the canvas
+var sizeY = 0; // Height of the canvas
+
+var globalMaxRadius = 10;     // Max size of circle
+var globalMinRadius = 5;      // Min size of circle
+var globalMaxPulses = 5;      // Max time to live in pulses
+var globalMinPulses = 2;      // Min time to live in pulses
+var globalMaxAnimTime = 5000; // Max time of one pulse
+var globalMinAnimTime = 1000; // Min time of one pulse
+var amountOfCircles = 500;    // Max amount of circles
 var id = 0;
+var circles = [];
+
+// Define some colors in an array, the script will create a pulsing circle with one of the colors
 var colorSchemes = {
     darkBlue: ['2,40,89', '1,17,38', '2,64,89', '67,68,91', '20,97,115'],
     green: ['174,243,103', '157,182,131', '119,167,71', '210,243,176', '83,116,49']
 };
-var colors = colorSchemes.green;
-var circles = [];
+var colors = colorSchemes.green; // Set the colorscheme
 
 function Circle(id, x, y, radius, maxRadius, rgbColorString, animTime, timeToLive, startFadeOut) {
     this.id = id;
@@ -98,6 +102,9 @@ function randomColor() {
 
 // Collect dead circles. We use this batch method to increase performance.
 // Splicing the array each time a circle died resulted in the canvas flashing/blinking
+//
+// TODO Do not splice the array just insert a new circle in the 'died' cicle's place!!!
+//
 function collectGarbage(frequency) {
     window.setInterval(function() {
         if (circles.length <= 0) return;
