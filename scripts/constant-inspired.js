@@ -33,6 +33,7 @@ var followMouse = false;
 
 var RotationLine = function(ctx, x1, y1, x2, y2, degree, radius1, radius2){
     var self = this;
+
     // Positions:
     this.x1 = x1;
     this.y1 = y1;
@@ -59,7 +60,7 @@ var RotationLine = function(ctx, x1, y1, x2, y2, degree, radius1, radius2){
     this.progressTime = 0;
     this.progressRatio = 0;
     this.startTimeClick = -1;
-    this.animationLengthClick = 250;
+    this.animationLengthClick = Math.random() * (1000 - 50) + 50;
     this.progressTimeClick = 0;
     this.progressRatioClick = 0;
 
@@ -82,7 +83,7 @@ var RotationLine = function(ctx, x1, y1, x2, y2, degree, radius1, radius2){
             // New random radius
             self.startRadius1 = Math.random() * innerCircleRadius;
         }
-        // Move the radius position when user clicks
+        // Move radius1 position when user clicks
         if(self.progressRatioClick < 1){
             var diffX = (self.startRadius1PosX - self.radius1PosXTo);
             var diffY = (self.startRadius1PosY - self.radius1PosYTo);
@@ -91,7 +92,13 @@ var RotationLine = function(ctx, x1, y1, x2, y2, degree, radius1, radius2){
         } else {
             self.startRadius1PosX = self.radius1PosXTo;
             self.startRadius1PosY = self.radius1PosYTo;
+            self.animationLengthClick = Math.random() * (3000 - 250) + 250;
         }
+        // Afterwards move radius2 position to the same location
+        // if last click is x time ago move radius2 to radius1PosTo
+        // TODO
+        // TODO
+        // TODO
         // Move the degree
         self.degree = self.startDegree + (self.degreesToRotate * self.progressRatio);
         // Grow the radius
@@ -127,7 +134,7 @@ var RotationLine = function(ctx, x1, y1, x2, y2, degree, radius1, radius2){
         ctx.lineTo(self.x2, self.y2);
         ctx.stroke();
     };
-    this.moveRadiusPos = function(toX, toY){
+    this.moveRadius1Pos = function(toX, toY){
         // Get timestamp to animate move
         self.startTimeClick = new Date().getTime();
         // Get the current position of the radius. (Needed when a user clicks while animating to new position)
@@ -136,6 +143,26 @@ var RotationLine = function(ctx, x1, y1, x2, y2, degree, radius1, radius2){
         // Get the desired location to move to
         self.radius1PosXTo = toX;
         self.radius1PosYTo = toY;
+    };
+    this.moveRadius2Pos = function(toX, toY){
+        // Get timestamp to animate move
+        self.startTimeClick = new Date().getTime();
+        // Get the current position of the radius. (Needed when a user clicks while animating to new position)
+        self.startRadius1PosX = self.radius1PosX;
+        self.startRadius1PosY = self.radius1PosY;
+        // Get the desired location to move to
+        self.radius1PosXTo = toX;
+        self.radius1PosYTo = toY;
+    };
+    this.resetRadiiPos = function(){
+        // Get timestamp to animate move
+        self.startTimeClick = new Date().getTime();
+        // Get the current position of the radius. (Needed when a user clicks while animating to new position)
+        self.startRadius1PosX = self.radius1PosX;
+        self.startRadius1PosY = self.radius1PosY;
+        // Get the desired location to move to
+        self.radius1PosXTo = sizeX / 2;
+        self.radius1PosYTo = sizeY / 2;
     };
 };
 
@@ -173,13 +200,10 @@ function resizeCanvas() {
 
 function click(event){
     for(var l in rotationLines){
-        rotationLines[l].moveRadiusPos(event.clientX, event.clientY);
+        rotationLines[l].moveRadius1Pos(event.clientX, event.clientY);
     }
 }
 function mouseMove(event){
-    if(!followMouse) return;
-    mouseX = event.clientX;
-    mouseY = event.clientY;
 }
 
 function init() {
