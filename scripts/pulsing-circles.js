@@ -1,5 +1,6 @@
 var pulsingCircles = function(window, document){
-
+var NAME = 'Pulsing Circles';
+var MESSAGE = '<p>Created By Daniel Verstegen</p>\r\n<p>Drawn By Your Computer</p>';
 var canvas;
 var ctx;
 var sizeX = 0; // Width of the canvas
@@ -42,6 +43,12 @@ function Circle(id, x, y, radius, maxRadius, rgbColorString, animTime, timeToLiv
 window.addEventListener('resize', resizeCanvas, false);
 
 function init() {
+    console.log('Loaded pulsing-circles.js');
+    // Set the title and message for this canvas animation
+    document.title = NAME;
+    var footer = document.getElementById('footer');
+    footer.innerHTML = MESSAGE;
+    footer.style = 'color: white;';
     // Get the canvas element to work with
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
